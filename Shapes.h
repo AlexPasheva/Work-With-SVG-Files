@@ -1,22 +1,58 @@
 #pragma once
 #include "Point.h"
-
-class Line
+class Shapes
 {
-private:
+protected:
 	Point start;
-	Point end;
 	char color[25];
 	unsigned int ID;
 public:
-	Line(double startX = 0, double startY = 0, double endX = 0, double endY = 0, const char* color = "Unidentified", unsigned int ID = 0);
-
+	//Getters and setters
 	char* GetColor();
 	unsigned int GetID();
+	Point GetStart();
 	void SetColor(char* color);
 	void SetID(unsigned int ID);
-
-	void Print(ostream& strm);
+	//Some Methods that are overwritten for different objects
+	virtual void Print(ostream& strm) = 0;
+	virtual void Translate(double vertical, double horizontal);
+};
+char* Shapes::GetColor()
+{
+	return color;
+}
+unsigned int Shapes::GetID()
+{
+	return ID;
+}
+Point Shapes::GetStart()
+{
+	return start;
+}
+void Shapes::SetColor(char* color)
+{
+	strcpy(this->color, color);
+}
+void Shapes::SetID(unsigned int ID)
+{
+	this->ID = ID;
+}
+void Shapes::Translate(double vertical, double horizontal)
+{
+	this->GetStart.SetX = this->GetStart.GetX + horizontal;
+	this->GetStart.SetY = this->GetStart.GetY + vertical;
+}
+//--------------------------------------------------------------- "Shapes" is a class that holds the shared characteristics of all the other classes in that header.
+class Line: public Shapes
+{
+private:
+	Point end;
+public:
+	Line(double startX = 0, double startY = 0, double endX = 0, double endY = 0, const char* color = "Unidentified", unsigned int ID = 0);
+	Point GetEnd();
+	//Some Methods
+	virtual void Translate(double vertical, double horizontal);
+	virtual void Print(ostream& strm);
 };
 Line::Line(double startX, double startY, double endX, double endY, const char* color, unsigned int ID)
 {
@@ -27,21 +63,9 @@ Line::Line(double startX, double startY, double endX, double endY, const char* c
 	strcpy(this->color, color);
 	this->ID = ID;
 }
-char* Line::GetColor()
+Point Line::GetEnd()
 {
-	return color;
-}
-unsigned int Line::GetID()
-{
-	return ID;
-}
-void Line::SetColor(char* color)
-{
-	strcpy(this->color, color);
-}
-void Line::SetID(unsigned int ID)
-{
-	this->ID = ID;
+	return end;
 }
 void Line::Print(ostream& strm)
 {
@@ -52,30 +76,30 @@ void Line::Print(ostream& strm)
 	strm << " ";
 	strm << color;
 }
-//---------------------------------------------------------------
-class Circle
+void Line::Translate(double vertical, double horizontal)
+{
+	this->GetStart.SetX = this->GetStart.GetX + horizontal;
+	this->GetStart.SetY = this->GetStart.GetY + vertical;
+	this->GetEnd.SetX = this->GetEnd.GetX + horizontal;
+	this->GetEnd.SetY = this->GetEnd.GetY + vertical;
+}
+//--------------------------------------------------------------- The translation in class Line behaves diferently and because of that it is overwritten.
+class Circle: public Shapes
 {
 private:
-	Point center;
 	double radius;
-	char color[25];
-	unsigned int ID;
 public:
 	Circle(double centerX = 0, double centerY = 0, double radius=0, const char* color = "Unidentified", unsigned int ID = 0);
-
+	//Getters and setters
 	double GetRadius();
-	char* GetColor();
-	unsigned int GetID();
 	void SetRadius(double radius);
-	void SetColor(char* color);
-	void SetID(unsigned int ID);
-	
-	void Print(ostream& strm);
+	//Some methods
+	virtual void Print(ostream& strm);
 };
 Circle::Circle(double centerX, double centerY, double radius, const char* color, unsigned int ID)
 {
-	center.SetX = centerX;
-	center.SetY = centerY;
+	start.SetX = centerX;
+	start.SetY = centerY;
 	if (radius<0)
 	{
 		radius = abs(radius);
@@ -88,63 +112,37 @@ double Circle::GetRadius()
 {
 	return radius;
 }
-char* Circle::GetColor()
-{
-	return color;
-}
-unsigned int Circle::GetID()
-{
-	return ID;
-}
 void Circle::SetRadius(double radius)
 {
 	this->radius = radius;
 }
-void Circle::SetColor(char* color)
-{
-	strcpy(this->color, color);
-}
-void Circle::SetID(unsigned int ID)
-{
-	this->ID = ID;
-}
 void Circle::Print(ostream& strm)
 {
 	strm << ID << "circle ";
-	center.Print(strm);
+	start.Print(strm);
 	strm << " " << radius << " ";
 	strm << color;
 }
-//----------------------------------------------------------------
-class Rectangle
+//---------------------------------------------------------------
+class Rectangle: public Shapes
 {
 private:
-	Point FirstPoint;
-	Point SecondPoint; 
 	double width;
 	double height;
-	char color[25];
-	unsigned int ID;
 public:
-	Rectangle(double FirstPointX = 0, double FirstPointY = 0, double SecondPointX = 0, double SecondPointY = 0, double width = 0, double height = 0, const char* color = "Unidentified", unsigned int ID = 0);
-
+	Rectangle(double FirstPointX = 0, double FirstPointY = 0, double width = 0, double height = 0, const char* color = "Unidentified", unsigned int ID = 0);
+	//Getters and Setters
 	double GetWidth();
 	double GetHeight();
-	char* GetColor();
-	unsigned int GetID();
 	void SetWidth(double width);
 	void SetHeight(double height);
-	void SetColor(char* color);
-	void SetID(unsigned int ID);
-
+	//Some methods
 	void Print(ostream& strm);
 };
-Rectangle::Rectangle(double FirstPointX, double FirstPointY, double SecondPointX, double SecondPointY, double width, double height, const char* color, unsigned int ID)
+Rectangle::Rectangle(double startX, double startY, double width, double height, const char* color, unsigned int ID)
 {
-	FirstPoint.SetX = FirstPointX;
-	FirstPoint.SetY = FirstPointY;
-	SecondPoint.SetX = SecondPointX;
-	SecondPoint.SetY = SecondPointY;
+	start.SetX = startX;
+	start.SetY = startY;
 	this->width = width;
 	this->height = height;
 	strcpy(this->color, color);
@@ -158,14 +156,6 @@ double Rectangle::GetHeight()
 {
 	return height;
 }
-char* Rectangle::GetColor()
-{
-	return color;
-}
-unsigned int Rectangle::GetID()
-{
-	return ID;
-}
 void Rectangle::SetWidth(double width)
 {
 	this->width = width;
@@ -174,20 +164,27 @@ void Rectangle::SetHeight(double height)
 {
 	this->height = height;
 }
-void Rectangle::SetColor(char* color)
-{
-	strcpy(this->color, color);
-}
-void Rectangle::SetID(unsigned int ID)
-{
-	this->ID = ID;
-}
 void Rectangle::Print(ostream& strm)
 {
 	strm << "rectangle ";
-	FirstPoint.Print(strm);
-	strm << " ";
-	SecondPoint.Print(strm);
+	start.Print(strm);
 	strm << " " << width << " " << height << " ";
 	strm << color;
+}
+//---------------------------------------------------------------
+//Shapes* shapeCollection[10] ;
+//shapeCollection[0] = new Circle(parameters);
+void TranslateShape(Shapes* array, int ArraySize, double vertical, double horizontal, int n = -1)//this function works with array like the one above
+{                                                                                                // it may work better with std container tho
+	if (n==-1)
+	{
+		for (int i = 0; i < ArraySize; i++)
+		{
+			array[i].Translate(vertical, horizontal);
+		}
+	}
+	else
+	{
+		array[n].Translate(vertical, horizontal);
+	}
 }
