@@ -50,5 +50,5 @@ double Point::Dist(Point other)
 }
 void Point::Print(ostream& strm)
 {
-    strm << "(" << x << "," << y << ")";
+    strm << x << "," << y;
 }
