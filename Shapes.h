@@ -7,6 +7,7 @@ protected:
 	char color[25];
 	unsigned int ID;
 public:
+	Shapes(double x = 0, double y = 0, const char* color = "Unidentified", unsigned int ID = 0);
 	//Getters and setters
 	char* GetColor();
 	unsigned int GetID();
@@ -17,6 +18,13 @@ public:
 	virtual void Print(ostream& strm) = 0;
 	virtual void Translate(double vertical, double horizontal);
 };
+Shapes::Shapes(double x, double y, const char* color, unsigned int ID)
+{
+	this->start.SetX = x;
+	this->start.SetY = y;
+	strcpy(this->color, color);
+	this->ID = ID;
+}
 char* Shapes::GetColor()
 {
 	return color;
@@ -54,14 +62,10 @@ public:
 	virtual void Translate(double vertical, double horizontal);
 	virtual void Print(ostream& strm);
 };
-Line::Line(double startX, double startY, double endX, double endY, const char* color, unsigned int ID)
+Line::Line(double startX, double startY, double endX, double endY, const char* color, unsigned int ID): Shapes(startX,startY,color,ID)
 {
-	start.SetX = startX;
-	start.SetY = startY;
-	end.SetX = endX;
-	end.SetY = endY;
-	strcpy(this->color, color);
-	this->ID = ID;
+	this->end.SetX = endX;
+	this->end.SetY = endY;
 }
 Point Line::GetEnd()
 {
@@ -96,17 +100,13 @@ public:
 	//Some methods
 	virtual void Print(ostream& strm);
 };
-Circle::Circle(double centerX, double centerY, double radius, const char* color, unsigned int ID)
+Circle::Circle(double centerX, double centerY, double radius, const char* color, unsigned int ID):Shapes(centerX, centerY, color, ID)
 {
-	start.SetX = centerX;
-	start.SetY = centerY;
 	if (radius<0)
 	{
 		radius = abs(radius);
 	}
 	this->radius = radius;
-	strcpy(this->color, color);
-	this->ID = ID;
 }
 double Circle::GetRadius()
 {
@@ -139,14 +139,10 @@ public:
 	//Some methods
 	void Print(ostream& strm);
 };
-Rectangle::Rectangle(double startX, double startY, double width, double height, const char* color, unsigned int ID)
+Rectangle::Rectangle(double startX, double startY, double width, double height, const char* color, unsigned int ID):Shapes(startX, startY, color, ID)
 {
-	start.SetX = startX;
-	start.SetY = startY;
 	this->width = width;
 	this->height = height;
-	strcpy(this->color, color);
-	this->ID = ID;
 }
 double Rectangle::GetWidth()
 {
