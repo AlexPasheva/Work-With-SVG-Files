@@ -15,8 +15,9 @@ public:
 	void SetColor(char* color);
 	void SetID(unsigned int ID);
 	//Some Methods that are overwritten for different objects
-	virtual void Print(ostream& strm) = 0;
+	virtual void Print(ostream& strm);
 	virtual void Translate(double vertical, double horizontal);
+	virtual Shapes* Create(Shapes* array, int ArraySize);
 };
 Shapes::Shapes(double x, double y, const char* color, unsigned int ID)
 {
@@ -50,6 +51,16 @@ void Shapes::Translate(double vertical, double horizontal)
 	this->GetStart.SetX = this->GetStart.GetX + horizontal;
 	this->GetStart.SetY = this->GetStart.GetY + vertical;
 }
+Shapes* Shapes::Create(Shapes* array, int ArraySize)
+{
+	Shapes* NewArray = new Shapes[ArraySize + 1];
+	for (int i = 0; i < ArraySize + 1; i++)
+	{
+		NewArray[i] = array[i];
+	}
+	NewArray[ArraySize + 1] = Shapes();
+	return NewArray;
+}
 //--------------------------------------------------------------- "Shapes" is a class that holds the shared characteristics of all the other classes in that header.
 class Line: public Shapes
 {
@@ -61,6 +72,7 @@ public:
 	//Some Methods
 	virtual void Translate(double vertical, double horizontal);
 	virtual void Print(ostream& strm);
+	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double endX, double endY, const char* color, unsigned int ID);
 };
 Line::Line(double startX, double startY, double endX, double endY, const char* color, unsigned int ID): Shapes(startX,startY,color,ID)
 {
@@ -87,6 +99,16 @@ void Line::Translate(double vertical, double horizontal)
 	this->GetEnd.SetX = this->GetEnd.GetX + horizontal;
 	this->GetEnd.SetY = this->GetEnd.GetY + vertical;
 }
+Shapes* Line::Create(Shapes* array, int ArraySize, double startX, double startY, double endX, double endY, const char* color, unsigned int ID)
+{
+	Shapes* NewArray = new Shapes[ArraySize + 1];
+	for (int i = 0; i < ArraySize + 1; i++)
+	{
+		NewArray[i] = array[i];
+	}
+	NewArray[ArraySize + 1] = Line(startX,startY,endX,endY,color,ID);
+	return NewArray;
+}
 //--------------------------------------------------------------- The translation in class Line behaves diferently and because of that it is overwritten.
 class Circle: public Shapes
 {
@@ -99,6 +121,7 @@ public:
 	void SetRadius(double radius);
 	//Some methods
 	virtual void Print(ostream& strm);
+	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double radius, const char* color, unsigned int ID);
 };
 Circle::Circle(double centerX, double centerY, double radius, const char* color, unsigned int ID):Shapes(centerX, centerY, color, ID)
 {
@@ -123,6 +146,16 @@ void Circle::Print(ostream& strm)
 	strm << " " << radius << " ";
 	strm << color;
 }
+Shapes* Circle::Create(Shapes* array, int ArraySize, double startX, double startY, double radius , const char* color, unsigned int ID)
+{
+	Shapes* NewArray = new Shapes[ArraySize + 1];
+	for (int i = 0; i < ArraySize + 1; i++)
+	{
+		NewArray[i] = array[i];
+	}
+	NewArray[ArraySize + 1] = Circle(startX, startY, radius, color, ID);
+	return NewArray;
+}
 //---------------------------------------------------------------
 class Rectangle: public Shapes
 {
@@ -138,6 +171,7 @@ public:
 	void SetHeight(double height);
 	//Some methods
 	void Print(ostream& strm);
+	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID);
 };
 Rectangle::Rectangle(double startX, double startY, double width, double height, const char* color, unsigned int ID):Shapes(startX, startY, color, ID)
 {
@@ -167,20 +201,14 @@ void Rectangle::Print(ostream& strm)
 	strm << " " << width << " " << height << " ";
 	strm << color;
 }
-//---------------------------------------------------------------
-//Shapes* shapeCollection[10] ;
-//shapeCollection[0] = new Circle(parameters);
-void TranslateShape(Shapes* array, int ArraySize, double vertical, double horizontal, int n = -1)//this function works with array like the one above
-{                                                                                                // it may work better with std container tho
-	if (n==-1)
+Shapes* Rectangle::Create(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID)
+{
+	Shapes* NewArray = new Shapes[ArraySize + 1];
+	for (int i = 0; i < ArraySize + 1; i++)
 	{
-		for (int i = 0; i < ArraySize; i++)
-		{
-			array[i].Translate(vertical, horizontal);
-		}
+		NewArray[i] = array[i];
 	}
-	else
-	{
-		array[n].Translate(vertical, horizontal);
-	}
+	NewArray[ArraySize + 1] = Rectangle(startX, startY, height, width, color, ID);
+	return NewArray;
 }
+//---------------------------------------------------------------
