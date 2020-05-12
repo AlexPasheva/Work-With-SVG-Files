@@ -18,6 +18,7 @@ public:
 	virtual void Print(ostream& strm);
 	virtual void Translate(double vertical, double horizontal);
 	virtual Shapes* Create(Shapes* array, int ArraySize);
+	virtual void WhitinRectangle(double startX, double startY, double width, double height);
 };
 Shapes::Shapes(double x, double y, const char* color, unsigned int ID)
 {
@@ -61,6 +62,13 @@ Shapes* Shapes::Create(Shapes* array, int ArraySize)
 	NewArray[ArraySize + 1] = Shapes();
 	return NewArray;
 }
+void Shapes::WhitinRectangle(double startX, double startY, double width, double height)
+{
+	if (start.WithinRectangle(startX,startY,width,height))
+	{
+		this->Print(cout);
+	}
+}
 //--------------------------------------------------------------- "Shapes" is a class that holds the shared characteristics of all the other classes in that header.
 class Line: public Shapes
 {
@@ -73,6 +81,7 @@ public:
 	virtual void Translate(double vertical, double horizontal);
 	virtual void Print(ostream& strm);
 	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double endX, double endY, const char* color, unsigned int ID);
+	virtual void WhitinRectangle(double startX, double startY, double width, double height)
 };
 Line::Line(double startX, double startY, double endX, double endY, const char* color, unsigned int ID): Shapes(startX,startY,color,ID)
 {
@@ -108,6 +117,13 @@ Shapes* Line::Create(Shapes* array, int ArraySize, double startX, double startY,
 	}
 	NewArray[ArraySize + 1] = Line(startX,startY,endX,endY,color,ID);
 	return NewArray;
+}
+void Line::WhitinRectangle(double startX, double startY, double width, double height)
+{
+	if (start.WithinRectangle(startX, startY, width, height)&&end.WithinRectangle(startX, startY, width, height))
+	{
+		this->Print(cout);
+	}
 }
 //--------------------------------------------------------------- The translation in class Line behaves diferently and because of that it is overwritten.
 class Circle: public Shapes
@@ -172,6 +188,7 @@ public:
 	//Some methods
 	void Print(ostream& strm);
 	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID);
+	virtual void WhitinRectangle(double startX, double startY, double width, double height)
 };
 Rectangle::Rectangle(double startX, double startY, double width, double height, const char* color, unsigned int ID):Shapes(startX, startY, color, ID)
 {
@@ -211,4 +228,18 @@ Shapes* Rectangle::Create(Shapes* array, int ArraySize, double startX, double st
 	NewArray[ArraySize + 1] = Rectangle(startX, startY, height, width, color, ID);
 	return NewArray;
 }
+void Rectangle::WhitinRectangle(double startX, double startY, double width, double height)
+{
+	Point LeftUpperCorner(start.GetX() + this->GetWidth(), start.GetY() + this->GetHeight());
+	Point RightUpperCorner(start.GetX(), start.GetY() + this->GetHeight());
+	Point LeftBottomCorner(start.GetX() + this->GetWidth(), start.GetY());
+	if (start.WithinRectangle(startX, startY, width, height) && LeftUpperCorner.WithinRectangle(startX, startY, width, height)&& RightUpperCorner.WithinRectangle(startX, startY, width, height)&& LeftBottomCorner.WithinRectangle(startX, startY, width, height))
+	{
+		this->Print(cout);
+	}
+}
 //---------------------------------------------------------------
+void WithinShape(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID)
+{
+
+}
