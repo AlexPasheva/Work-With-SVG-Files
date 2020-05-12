@@ -4,17 +4,17 @@
 void Help()
 {
 	cout << "The following commands are supported:" << endl <<
-		"open <file>	 opens <file>" << endl <<
-		"close			 closes currently opened file" << endl <<
-		"save			 saves the currently open file" << endl <<
-		"saveas <file>	 saves the currently open file in <file>" << endl <<
-		"help			 prints this information" << endl <<
-		"exit			 exists the program" << endl <<
-		"print           prints all shapes" << endl <<
-		"create          creates new shape" << endl <<
-		"erase <n>       erases the nth shape" << endl <<
-		"translate [<n>] transaltes the nth shape or if n is not given, translates all shapes" << endl <<
-		"whitin <option> prints all shapes in that region" << endl ;
+		"open <file>	  opens <file>" << endl <<
+		"close			  closes currently opened file" << endl <<
+		"save			  saves the currently open file" << endl <<
+		"saveas <file>	  saves the currently open file in <file>" << endl <<
+		"help			  prints this information" << endl <<
+		"exit			  exists the program" << endl <<
+		"print            prints all shapes" << endl <<
+		"create           creates new shape" << endl <<
+		"erase <n>        erases the nth shape" << endl <<
+		"translate [<n>]  transaltes the nth shape or if n is not given, translates all shapes" << endl <<
+		"whitin <option>  prints all shapes in that region" << endl ;
 }
 void Print(Shapes* array, int ArraySize)
 {
@@ -80,5 +80,18 @@ void TranslateShape(Shapes* array, int ArraySize, double vertical, double horizo
 	else
 	{
 		array[n].Translate(vertical, horizontal);
+	}
+}
+void WithinShape(Shapes* array, int ArraySize, double startX, double startY, double width, double height = 0)
+{
+	if (height == 0)
+	{
+		for (int i = 0; i < ArraySize; i++)
+			array[i].WithinCircle(startX, startY, width);
+	}
+	else
+	{
+		for (int i = 0; i < ArraySize; i++)
+			array[i].WhitinRectangle(startX, startY, width, height);
 	}
 }
