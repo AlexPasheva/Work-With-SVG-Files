@@ -20,6 +20,8 @@ public:
     double Dist(Point other);
     // Print the point on the stream.
     void Print(ostream& strm);
+    bool WithinRectangle(double startX, double startY, double width, double height);
+    bool WithinCircle(double startX, double startY, double radius);
 };
 Point::Point(double x, double y)
 {
@@ -34,13 +36,27 @@ double Point::GetY()
 {
     return y;
 }
-void Point::SetX(double x)
+void Point::SetX(const double x)
 {
     this->x = x;
 }
-void Point::SetY(double y)
+void Point::SetY(const double y)
 {
     this->y = y;
+}
+bool Point::WithinRectangle(double startX, double startY, double width, double height)
+{
+    if (this->GetX() < startX + width && this->GetX() > startX && this->GetY() > startY && this->GetY() < startY + height)
+        return true;
+    else
+        return false;
+}
+bool Point::WithinCircle(double startX, double startY, double radius)
+{
+    if (((this->GetX() - startX) * (this->GetX() - startX) + (this->GetY() - startY) * (this->GetY() - startY)) < radius * radius)
+        return true;
+    else
+        return false;
 }
 double Point::Dist(Point other)
 {
@@ -52,3 +68,4 @@ void Point::Print(ostream& strm)
 {
     strm << x << "," << y;
 }
+
