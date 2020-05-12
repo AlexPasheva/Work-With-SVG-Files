@@ -19,6 +19,7 @@ public:
 	virtual void Translate(double vertical, double horizontal);
 	virtual Shapes* Create(Shapes* array, int ArraySize);
 	virtual void WhitinRectangle(double startX, double startY, double width, double height);
+	virtual void WithinCircle(double startX, double startY, double radius);
 };
 Shapes::Shapes(double x, double y, const char* color, unsigned int ID)
 {
@@ -65,11 +66,16 @@ Shapes* Shapes::Create(Shapes* array, int ArraySize)
 void Shapes::WhitinRectangle(double startX, double startY, double width, double height)
 {
 	if (start.WithinRectangle(startX,startY,width,height))
-	{
 		this->Print(cout);
-	}
+}
+void Shapes::WithinCircle(double startX, double startY, double radius)
+{
+	if (start.WithinCircle(startX, startY, radius))
+		this->Print(cout);
 }
 //--------------------------------------------------------------- "Shapes" is a class that holds the shared characteristics of all the other classes in that header.
+
+
 class Line: public Shapes
 {
 private:
@@ -81,7 +87,8 @@ public:
 	virtual void Translate(double vertical, double horizontal);
 	virtual void Print(ostream& strm);
 	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double endX, double endY, const char* color, unsigned int ID);
-	virtual void WhitinRectangle(double startX, double startY, double width, double height)
+	virtual void WhitinRectangle(double startX, double startY, double width, double height);
+	virtual void WithinCircle(double startX, double startY, double radius);
 };
 Line::Line(double startX, double startY, double endX, double endY, const char* color, unsigned int ID): Shapes(startX,startY,color,ID)
 {
@@ -125,7 +132,14 @@ void Line::WhitinRectangle(double startX, double startY, double width, double he
 		this->Print(cout);
 	}
 }
-//--------------------------------------------------------------- The translation in class Line behaves diferently and because of that it is overwritten.
+void Line::WithinCircle(double startX, double startY, double radius)
+{
+	if (start.WithinCircle(startX, startY, radius)&&end.WithinCircle(startX, startY, radius))
+		this->Print(cout);
+}
+//--------------------------------------------------------------- 
+
+
 class Circle: public Shapes
 {
 private:
@@ -138,6 +152,8 @@ public:
 	//Some methods
 	virtual void Print(ostream& strm);
 	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double radius, const char* color, unsigned int ID);
+	virtual void WhitinRectangle(double startX, double startY, double width, double height);
+	virtual void WithinCircle(double startX, double startY, double radius);
 };
 Circle::Circle(double centerX, double centerY, double radius, const char* color, unsigned int ID):Shapes(centerX, centerY, color, ID)
 {
@@ -172,7 +188,20 @@ Shapes* Circle::Create(Shapes* array, int ArraySize, double startX, double start
 	NewArray[ArraySize + 1] = Circle(startX, startY, radius, color, ID);
 	return NewArray;
 }
+void Circle::WhitinRectangle(double startX, double startY, double width, double height)
+{
+
+}
+void Circle::WithinCircle(double startX, double startY, double radius)
+{
+	Point point(startX, startY);
+	int dist = start.Dist(point);
+	if (dist + radius < this->GetRadius())
+		this->Print(cout);
+}
 //---------------------------------------------------------------
+
+
 class Rectangle: public Shapes
 {
 private:
@@ -188,7 +217,8 @@ public:
 	//Some methods
 	void Print(ostream& strm);
 	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID);
-	virtual void WhitinRectangle(double startX, double startY, double width, double height)
+	virtual void WhitinRectangle(double startX, double startY, double width, double height);
+	virtual void WithinCircle(double startX, double startY, double radius);
 };
 Rectangle::Rectangle(double startX, double startY, double width, double height, const char* color, unsigned int ID):Shapes(startX, startY, color, ID)
 {
@@ -238,8 +268,15 @@ void Rectangle::WhitinRectangle(double startX, double startY, double width, doub
 		this->Print(cout);
 	}
 }
-//---------------------------------------------------------------
-void WithinShape(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID)
+void Rectangle::WithinCircle(double startX, double startY, double radius)
 {
-
+	Point LeftUpperCorner(start.GetX() + this->GetWidth(), start.GetY() + this->GetHeight());
+	Point RightUpperCorner(start.GetX(), start.GetY() + this->GetHeight());
+	Point LeftBottomCorner(start.GetX() + this->GetWidth(), start.GetY());
+	if (start.WithinCircle(startX, startY, radius) && LeftUpperCorner.WithinCircle(startX, startY, radius) && RightUpperCorner.WithinCircle(startX, startY, radius) && LeftBottomCorner.WithinCircle(startX, startY, radius))
+	{
+		this->Print(cout);
+	}
 }
+//---------------------------------------------------------------
+
