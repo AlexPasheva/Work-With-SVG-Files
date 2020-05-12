@@ -196,8 +196,16 @@ void Circle::WithinCircle(double startX, double startY, double radius)
 {
 	Point point(startX, startY);
 	int dist = start.Dist(point);
-	if (dist + radius < this->GetRadius())
-		this->Print(cout);
+	if (this->GetRadius()<radius)
+	{
+		if (dist + radius < this->GetRadius())
+			this->Print(cout);
+	}
+	else
+	{
+		if (dist + this->GetRadius() < radius)
+			this->Print(cout);
+	}
 }
 //---------------------------------------------------------------
 
