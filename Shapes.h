@@ -8,19 +8,26 @@ protected:
 	unsigned int ID;
 public:
 	Shapes(double x = 0, double y = 0, const char* color = "Unidentified", unsigned int ID = 0);
+
+
 	//Getters and setters
 	char* GetColor();
 	unsigned int GetID();
 	Point GetStart();
 	void SetColor(char* color);
 	void SetID(unsigned int ID);
+
+
 	//Some Methods that are overwritten for different objects
 	virtual void Print(ostream& strm);
 	virtual void Translate(double vertical, double horizontal);
 	virtual Shapes* Create(Shapes* array, int ArraySize);
 	virtual void WhitinRectangle(double startX, double startY, double width, double height);
 	virtual void WithinCircle(double startX, double startY, double radius);
+
+	virtual Shapes* clone();
 };
+
 Shapes::Shapes(double x, double y, const char* color, unsigned int ID)
 {
 	this->start.SetX = x;
@@ -28,6 +35,8 @@ Shapes::Shapes(double x, double y, const char* color, unsigned int ID)
 	strcpy(this->color, color);
 	this->ID = ID;
 }
+
+
 char* Shapes::GetColor()
 {
 	return color;
@@ -48,6 +57,8 @@ void Shapes::SetID(unsigned int ID)
 {
 	this->ID = ID;
 }
+
+
 void Shapes::Translate(double vertical, double horizontal)
 {
 	this->GetStart.SetX = this->GetStart.GetX + horizontal;
@@ -73,6 +84,11 @@ void Shapes::WithinCircle(double startX, double startY, double radius)
 	if (start.WithinCircle(startX, startY, radius))
 		this->Print(cout);
 }
+
+Shapes* Shapes::clone()
+{
+	return new Shapes(*this);
+}
 //--------------------------------------------------------------- "Shapes" is a class that holds the shared characteristics of all the other classes in that header.
 
 
@@ -82,23 +98,32 @@ private:
 	Point end;
 public:
 	Line(double startX = 0, double startY = 0, double endX = 0, double endY = 0, const char* color = "Unidentified", unsigned int ID = 0);
+
 	Point GetEnd();
+
+
 	//Some Methods
 	virtual void Translate(double vertical, double horizontal);
 	virtual void Print(ostream& strm);
 	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double endX, double endY, const char* color, unsigned int ID);
 	virtual void WhitinRectangle(double startX, double startY, double width, double height);
 	virtual void WithinCircle(double startX, double startY, double radius);
+
+	virtual Line* clone();
 };
+
 Line::Line(double startX, double startY, double endX, double endY, const char* color, unsigned int ID): Shapes(startX,startY,color,ID)
 {
 	this->end.SetX = endX;
 	this->end.SetY = endY;
 }
+
 Point Line::GetEnd()
 {
 	return end;
 }
+
+
 void Line::Print(ostream& strm)
 {
 	strm << "line ";
@@ -137,6 +162,11 @@ void Line::WithinCircle(double startX, double startY, double radius)
 	if (start.WithinCircle(startX, startY, radius)&&end.WithinCircle(startX, startY, radius))
 		this->Print(cout);
 }
+
+Line* Line::clone()
+{
+	return new Line(*this);
+}
 //--------------------------------------------------------------- 
 
 
@@ -146,15 +176,22 @@ private:
 	double radius;
 public:
 	Circle(double centerX = 0, double centerY = 0, double radius=0, const char* color = "Unidentified", unsigned int ID = 0);
+
+
 	//Getters and setters
 	double GetRadius();
 	void SetRadius(double radius);
+
+
 	//Some methods
 	virtual void Print(ostream& strm);
 	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double radius, const char* color, unsigned int ID);
 	virtual void WhitinRectangle(double startX, double startY, double width, double height);
 	virtual void WithinCircle(double startX, double startY, double radius);
+
+	virtual Circle* clone();
 };
+
 Circle::Circle(double centerX, double centerY, double radius, const char* color, unsigned int ID):Shapes(centerX, centerY, color, ID)
 {
 	if (radius<0)
@@ -163,6 +200,8 @@ Circle::Circle(double centerX, double centerY, double radius, const char* color,
 	}
 	this->radius = radius;
 }
+
+
 double Circle::GetRadius()
 {
 	return radius;
@@ -171,6 +210,8 @@ void Circle::SetRadius(double radius)
 {
 	this->radius = radius;
 }
+
+
 void Circle::Print(ostream& strm)
 {
 	strm << ID << "circle ";
@@ -207,6 +248,12 @@ void Circle::WithinCircle(double startX, double startY, double radius)
 			this->Print(cout);
 	}
 }
+
+Circle* Circle::clone()
+{
+	return new Circle(*this);
+}
+
 //---------------------------------------------------------------
 
 
@@ -227,12 +274,17 @@ public:
 	virtual Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID);
 	virtual void WhitinRectangle(double startX, double startY, double width, double height);
 	virtual void WithinCircle(double startX, double startY, double radius);
+
+	virtual Rectangle* clone();
 };
+
 Rectangle::Rectangle(double startX, double startY, double width, double height, const char* color, unsigned int ID):Shapes(startX, startY, color, ID)
 {
 	this->width = width;
 	this->height = height;
 }
+
+
 double Rectangle::GetWidth()
 {
 	return width;
@@ -249,6 +301,8 @@ void Rectangle::SetHeight(double height)
 {
 	this->height = height;
 }
+
+
 void Rectangle::Print(ostream& strm)
 {
 	strm << "rectangle ";
@@ -286,5 +340,9 @@ void Rectangle::WithinCircle(double startX, double startY, double radius)
 		this->Print(cout);
 	}
 }
-//---------------------------------------------------------------
 
+Rectangle* Rectangle::clone()
+{
+	return new Rectangle(*this);
+}
+//---------------------------------------------------------------
