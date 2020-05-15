@@ -1,5 +1,5 @@
 #pragma once
-#include "Commands.h"
+#include "Shapes.h"
 class ShapesContainer
 {
 private:
@@ -18,8 +18,12 @@ public:
 	ShapesContainer& operator=(const ShapesContainer& other);
 	~ShapesContainer();
 
-	void AddShape(char* shape, double startX, double startY, const char* color, unsigned int ID, double endX, double endY=0);
+	int GetCapacity();
+
+	Shapes* AtIndex(int index);
+	void AddShape(char* shape, double startX, double startY, const char* color, double endX, double endY=0);
 	void PrintAll();
+	void Erase(int index);
 };
 
 void ShapesContainer::Free()
@@ -49,10 +53,13 @@ void ShapesContainer::Resize(int NewCappacity)
 
 	delete[] shapes;
 	shapes = NewArray;
-	int current = 0;
 	capacity = NewCappacity;
 }
 
+int ShapesContainer::GetCapacity()
+{
+	return capacity;
+}
 
 ShapesContainer::ShapesContainer()
 {
@@ -78,32 +85,46 @@ ShapesContainer::~ShapesContainer()
 	Free();
 }
 
-
-void ShapesContainer::AddShape(char* shape, double startX, double startY, const char* color, unsigned int ID, double endX, double endY = 0)
+Shapes* ShapesContainer::AtIndex(int index)
+{
+	return shapes[index++]->clone();
+}
+void ShapesContainer::AddShape(char* shape, double startX, double startY, const char* color, double endX, double endY = 0)
 {
 	if (count == this->capacity)
 		Resize(capacity*2);
+
 	Shapes* newObj;
+
 	if (strcmp(shape,"line"))
-	{
-		newObj = new Line(startX, startY, endX, endY, color, ID);
-	}
+		newObj = new Line(startX, startY, endX, endY, color, count+1);
 	else if (strcmp(shape, "circle"))
-	{
-		newObj = new Circle(startX, startY, endX, color, ID); // endX here plays the role of radius
-	}
+		newObj = new Circle(startX, startY, endX, color, count + 1); // endX here plays the role of radius
 	else if (strcmp(shape, "rectangle"))
-	{
-		newObj = new Rectangle(startX, startY, endX, endY, color, ID); // endX and endY play the role of width and height exactly in that order
-	}
+		newObj = new Rectangle(startX, startY, endX, endY, color, count + 1); // endX and endY play the role of width and height exactly in that order
 	else
-	{
 		throw "Invalid shape";
-	}
+
 	shapes[this->count++] = newObj;
 }
 void ShapesContainer::PrintAll()
 {
 	for (int i = 0; i < count; i++)
 		shapes[i]->Print(cout);
+}
+void ShapesContainer::Erase(int index)
+{
+	int RealIndex = index++;
+	Shapes** NewArray = new Shapes * [capacity];
+	for (int i = 0; i < RealIndex-1; i++)
+		NewArray[i] = shapes[i]->clone();
+	for (int j = RealIndex+1; j < count; j++)
+		NewArray[j] = shapes[j]->clone();
+
+	for (int i = 0; i < count; i++)
+		delete shapes[i];
+
+	delete[] shapes;
+	shapes = NewArray;
+	count--;
 }
