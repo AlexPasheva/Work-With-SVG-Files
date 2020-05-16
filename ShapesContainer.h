@@ -21,7 +21,7 @@ public:
 	int GetCapacity();
 
 	Shapes* AtIndex(int index);
-	void AddShape(char* shape, double startX, double startY, const char* color, double endX, double endY=0);
+	void AddShape(const char* shape, double startX, double startY, const char* color, double endX, double endY=0);
 	void PrintAll();
 	void Erase(int index);
 };
@@ -89,21 +89,29 @@ Shapes* ShapesContainer::AtIndex(int index)
 {
 	return shapes[index++]->clone();
 }
-void ShapesContainer::AddShape(char* shape, double startX, double startY, const char* color, double endX, double endY = 0)
+void ShapesContainer::AddShape(const char* shape, double startX, double startY, const char* color, double endX, double endY)
 {
 	if (count == this->capacity)
 		Resize(capacity*2);
 
 	Shapes* newObj;
 
-	if (strcmp(shape,"line"))
+	if (strcmp(shape, "line")==0)
+	{
 		newObj = new Line(startX, startY, endX, endY, color, count+1);
-	else if (strcmp(shape, "circle"))
+	}
+	else if (strcmp(shape, "circle")==0)
+	{
 		newObj = new Circle(startX, startY, endX, color, count + 1); // endX here plays the role of radius
-	else if (strcmp(shape, "rectangle"))
+	}
+	else if (strcmp(shape, "rectangle")==0)
+	{
 		newObj = new Rectangle(startX, startY, endX, endY, color, count + 1); // endX and endY play the role of width and height exactly in that order
+	}
 	else
+	{
 		throw "Invalid shape";
+	}
 
 	shapes[this->count++] = newObj;
 }
