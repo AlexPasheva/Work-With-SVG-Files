@@ -1,5 +1,7 @@
 #pragma once
+#pragma warning(disable : 4996)
 #include "Point.h"
+
 class Shapes
 {
 protected:
@@ -30,8 +32,8 @@ public:
 
 Shapes::Shapes(double x, double y, const char* color, unsigned int ID)
 {
-	this->start.SetX = x;
-	this->start.SetY = y;
+	this->start.SetX(x);
+	this->start.SetY(y);
 	strcpy(this->color, color);
 	this->ID = ID;
 }
@@ -59,10 +61,17 @@ void Shapes::SetID(unsigned int ID)
 }
 
 
+void Shapes::Print(ostream& strm)
+{
+	strm << "shape ";
+	start.Print(strm);
+	strm << " ";
+	strm << color;
+}
 void Shapes::Translate(double vertical, double horizontal)
 {
-	this->GetStart.SetX = this->GetStart.GetX + horizontal;
-	this->GetStart.SetY = this->GetStart.GetY + vertical;
+	this->GetStart().SetX(this->GetStart().GetX() + horizontal);
+	this->GetStart().SetY(this->GetStart().GetY() + vertical);
 }
 Shapes* Shapes::Create(Shapes* array, int ArraySize)
 {
@@ -114,8 +123,8 @@ public:
 
 Line::Line(double startX, double startY, double endX, double endY, const char* color, unsigned int ID): Shapes(startX,startY,color,ID)
 {
-	this->end.SetX = endX;
-	this->end.SetY = endY;
+	this->end.SetX(endX);
+	this->end.SetY(endY);
 }
 
 Point Line::GetEnd()
@@ -126,19 +135,20 @@ Point Line::GetEnd()
 
 void Line::Print(ostream& strm)
 {
-	strm << "line ";
+	strm << ID << ". line, ";
 	start.Print(strm);
-	strm << " ";
+	strm << ", ";
 	end.Print(strm);
-	strm << " ";
+	strm << ", ";
 	strm << color;
+	strm << endl;
 }
 void Line::Translate(double vertical, double horizontal)
 {
-	this->GetStart.SetX = this->GetStart.GetX + horizontal;
-	this->GetStart.SetY = this->GetStart.GetY + vertical;
-	this->GetEnd.SetX = this->GetEnd.GetX + horizontal;
-	this->GetEnd.SetY = this->GetEnd.GetY + vertical;
+	this->GetStart().SetX(this->GetStart().GetX() + horizontal);
+	this->GetStart().SetY( this->GetStart().GetY() + vertical);
+	this->GetEnd().SetX (this->GetEnd().GetX() + horizontal);
+	this->GetEnd().SetY (this->GetEnd().GetY() + vertical);
 }
 Shapes* Line::Create(Shapes* array, int ArraySize, double startX, double startY, double endX, double endY, const char* color, unsigned int ID)
 {
@@ -214,10 +224,11 @@ void Circle::SetRadius(double radius)
 
 void Circle::Print(ostream& strm)
 {
-	strm << ID << "circle ";
+	strm << ID << ". circle, ";
 	start.Print(strm);
-	strm << " " << radius << " ";
+	strm << ", " << radius << ", ";
 	strm << color;
+	strm << endl;
 }
 Shapes* Circle::Create(Shapes* array, int ArraySize, double startX, double startY, double radius , const char* color, unsigned int ID)
 {
@@ -236,7 +247,7 @@ void Circle::WhitinRectangle(double startX, double startY, double width, double 
 void Circle::WithinCircle(double startX, double startY, double radius)
 {
 	Point point(startX, startY);
-	int dist = start.Dist(point);
+	double dist = start.Dist(point);
 	if (this->GetRadius()<radius)
 	{
 		if (dist + radius < this->GetRadius())
@@ -304,10 +315,11 @@ void Rectangle::SetHeight(double height)
 
 void Rectangle::Print(ostream& strm)
 {
-	strm << "rectangle ";
+	strm << ID << ". rectangle, ";
 	start.Print(strm);
-	strm << " " << width << " " << height << " ";
+	strm << ", " << width << ", " << height << ", ";
 	strm << color;
+	strm << endl;
 }
 Shapes* Rectangle::Create(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID)
 {
@@ -345,4 +357,3 @@ Rectangle* Rectangle::clone()
 	return new Rectangle(*this);
 }
 //---------------------------------------------------------------
-
