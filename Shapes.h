@@ -23,7 +23,6 @@ public:
 	//Some Methods that are overwritten for different objects
 	virtual void Print(ostream& strm)=0;
 	virtual void Translate(double vertical, double horizontal)=0;
-	//virtual Shapes* Create(Shapes* array, int ArraySize)=0;
 	virtual void WhitinRectangle(double startX, double startY, double width, double height)=0;
 	virtual void WithinCircle(double startX, double startY, double radius)=0;
 
@@ -75,7 +74,6 @@ public:
 	//Some Methods
 	void Translate(double vertical, double horizontal);
 	void Print(ostream& strm);
-	//Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double endX, double endY, const char* color, unsigned int ID);
 	void WhitinRectangle(double startX, double startY, double width, double height);
 	void WithinCircle(double startX, double startY, double radius);
 
@@ -147,7 +145,6 @@ public:
 	//Some methods
 	void Print(ostream& strm);
 	void Translate(double horizontal, double vertical);
-	//Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double radius, const char* color, unsigned int ID);
 	void WhitinRectangle(double startX, double startY, double width, double height);
 	void WithinCircle(double startX, double startY, double radius);
 
@@ -187,16 +184,6 @@ void Circle::Translate(double horizontal, double vertical)
 	this->GetStart().SetX(this->GetStart().GetX() + horizontal);
 	this->GetStart().SetY(this->GetStart().GetY() + vertical);
 }
-//Shapes* Circle::Create(Shapes* array, int ArraySize, double startX, double startY, double radius , const char* color, unsigned int ID)
-//{
-//	Shapes* NewArray = new Shapes[ArraySize + 1];
-//	for (int i = 0; i < ArraySize + 1; i++)
-//	{
-//		NewArray[i] = array[i];
-//	}
-//	NewArray[ArraySize + 1] = Circle(startX, startY, radius, color, ID);
-//	return NewArray;
-//}
 void Circle::WhitinRectangle(double startX, double startY, double width, double height)
 {
 
@@ -239,7 +226,6 @@ public:
 	//Some methods
 	void Print(ostream& strm);
 	void Translate(double horizontal, double vertical);
-	//Shapes* Create(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID);
 	void WhitinRectangle(double startX, double startY, double width, double height);
 	void WithinCircle(double startX, double startY, double radius);
 
@@ -279,16 +265,6 @@ void Rectangle::Print(ostream& strm)
 	strm << color;
 	strm << endl;
 }
-//Shapes* Rectangle::Create(Shapes* array, int ArraySize, double startX, double startY, double width, double height, const char* color, unsigned int ID)
-//{
-//	Shapes* NewArray = new Shapes[ArraySize + 1];
-//	for (int i = 0; i < ArraySize + 1; i++)
-//	{
-//		NewArray[i] = array[i];
-//	}
-//	NewArray[ArraySize + 1] = Rectangle(startX, startY, height, width, color, ID);
-//	return NewArray;
-//}
 void Rectangle::WhitinRectangle(double startX, double startY, double width, double height)
 {
 	Point LeftUpperCorner(start.GetX() + this->GetWidth(), start.GetY() + this->GetHeight());
