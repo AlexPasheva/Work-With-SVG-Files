@@ -46,11 +46,7 @@ void ShapesContainer::Resize(int NewCappacity)
 	Shapes** NewArray = new Shapes*[NewCappacity];
 
 	for (int i = 0; i < count; i++)
-		NewArray[i] = shapes[i]->clone();
-
-	for (int i = 0; i < count; i++)
-		delete shapes[i];
-
+		NewArray[i] = shapes[i];
 	delete[] shapes;
 	shapes = NewArray;
 	capacity = NewCappacity;
