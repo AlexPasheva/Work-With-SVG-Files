@@ -145,6 +145,7 @@ public:
 	//Some methods
 	void Print(ostream& strm);
 	void Translate(double horizontal, double vertical);
+	bool IsWhitinRectangle(double startX, double startY, double width, double height);
 	void WhitinRectangle(double startX, double startY, double width, double height);
 	void WithinCircle(double startX, double startY, double radius);
 
@@ -184,9 +185,38 @@ void Circle::Translate(double horizontal, double vertical)
 	this->GetStart().SetX(this->GetStart().GetX() + horizontal);
 	this->GetStart().SetY(this->GetStart().GetY() + vertical);
 }
+bool Circle::IsWhitinRectangle(double startX, double startY, double width, double height)
+{
+	Point rectangleCenter = Point((startX + width / 2),(startY + height / 2));
+
+	double w = width / 2;
+	double h = height / 2;
+
+	double dx = abs(start.GetX() - rectangleCenter.GetX());
+	double dy = abs(start.GetY() - rectangleCenter.GetY());
+
+	if (dx > (radius + w) || dy > (radius + h)) return true;
+
+	Point circleDistance = Point((abs(start.GetX() - startX - w)), (abs(start.GetY() - startY - h)));
+
+	if (circleDistance.GetX() <= (w))
+	{
+		return false;
+	}
+	if (circleDistance.GetY() <= (h))
+	{
+		return false;
+	}
+	double cornerDistanceSq = pow(circleDistance.GetX() - w, 2) + pow(circleDistance.GetY() - h, 2);
+
+	return !(cornerDistanceSq <= (pow(radius, 2)));
+}
 void Circle::WhitinRectangle(double startX, double startY, double width, double height)
 {
-
+	if (this->IsWhitinRectangle(startX,startY,width,height))
+	{
+		this->Print(cout);
+	}
 }
 void Circle::WithinCircle(double startX, double startY, double radius)
 {
