@@ -26,6 +26,7 @@ public:
 	void Erase(int index);
 	void WithinCircle(double startX, double startY, double radius);
 	void WithinRectangle(double startX, double startY, double width, double height);
+	void TranslateShape(double vertical, double horizontal);
 	void TranslateShape(double vertical, double horizontal, int n);
 };
 
@@ -181,6 +182,13 @@ void ShapesContainer::WithinRectangle(double startX, double startY, double width
 	if (counter == 0)
 	{
 		cout << "No figures are located within circle " << startX << " " << startY << " " << width << " " << height;
+	}
+}
+void ShapesContainer::TranslateShape(double vertical, double horizontal)
+{
+	for (int i = 0; i < count; i++)
+	{
+		shapes[i]->Translate(vertical, horizontal);
 	}
 }
 void ShapesContainer::TranslateShape( double vertical, double horizontal, int n)
