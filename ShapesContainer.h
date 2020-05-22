@@ -121,25 +121,29 @@ void ShapesContainer::PrintAll()
 }
 void ShapesContainer::Erase(int index)
 {
-	cout << count << index << endl;
-	if (index > count)
+	int i = 0;
+	for (i ; i < count; i++)
+	{
+		if (index==shapes[i]->GetID())
+		{
+			cout << "Erased figure number " << index << "!" << endl;
+			Shapes** NewArray = new Shapes * [capacity];
+			int i, j;
+			for (i = 0; i < index - 1; i++)
+				NewArray[i] = shapes[i];
+			for (j = index; j < count; j++)
+			{
+				NewArray[i] = shapes[j];
+				i++;
+			}
+			delete[] shapes;
+			shapes = NewArray;
+			count--;
+			break;
+		}
+	}
+	if (i == count)
 	{
 		cout << "There is no figure number " << index << "!" << endl;
-	}
-	else
-	{
-		cout << "Erased figure number " << index << "!" << endl;
-		Shapes** NewArray = new Shapes * [capacity];
-		int i, j;
-		for (i = 0; i < index-1; i++)
-			NewArray[i] = shapes[i];
-		for (j = index; j < count; j++)
-		{
-			NewArray[i] = shapes[j];
-			i++;
-		}
-		delete[] shapes;
-		shapes = NewArray;
-		count--;
-	}
+	}	
 }
