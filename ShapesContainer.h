@@ -37,7 +37,7 @@ void ShapesContainer::CopyFrom(const ShapesContainer& other)
 {
 	shapes = new Shapes * [other.capacity];
 	capacity = other.capacity;
-	count = other.count;
+	count = 0;
 	for (int i = 0; i < count; i++)
 		shapes[i] = other.shapes[i]->clone();
 }
@@ -83,7 +83,10 @@ ShapesContainer::~ShapesContainer()
 
 Shapes* ShapesContainer::AtIndex(int index)
 {
-	return shapes[index++]->clone();
+	if (index-1>count)
+		cout << "There is no figure at index" << index;
+	else 
+		return shapes[index-1];
 }
 void ShapesContainer::AddShape(const char* shape, double startX, double startY, const char* color, double endX, double endY)
 {
@@ -118,17 +121,25 @@ void ShapesContainer::PrintAll()
 }
 void ShapesContainer::Erase(int index)
 {
-	int RealIndex = index++;
-	Shapes** NewArray = new Shapes * [capacity];
-	for (int i = 0; i < RealIndex-1; i++)
-		NewArray[i] = shapes[i]->clone();
-	for (int j = RealIndex+1; j < count; j++)
-		NewArray[j] = shapes[j]->clone();
-
-	for (int i = 0; i < count; i++)
-		delete shapes[i];
-
-	delete[] shapes;
-	shapes = NewArray;
-	count--;
+	cout << count << index << endl;
+	if (index > count)
+	{
+		cout << "There is no figure number " << index << "!" << endl;
+	}
+	else
+	{
+		cout << "Erased figure number " << index << "!" << endl;
+		Shapes** NewArray = new Shapes * [capacity];
+		int i, j;
+		for (i = 0; i < index-1; i++)
+			NewArray[i] = shapes[i];
+		for (j = index; j < count; j++)
+		{
+			NewArray[i] = shapes[j];
+			i++;
+		}
+		delete[] shapes;
+		shapes = NewArray;
+		count--;
+	}
 }
