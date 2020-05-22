@@ -18,12 +18,15 @@ public:
 	ShapesContainer& operator=(const ShapesContainer& other);
 	~ShapesContainer();
 
-	int GetCapacity();
+	int GetCount();
 
 	Shapes* AtIndex(int index);
 	void AddShape(const char* shape, double startX, double startY, const char* color, double endX, double endY=0);
 	void PrintAll();
 	void Erase(int index);
+	void WithinCircle(double startX, double startY, double radius);
+	void WithinRectangle(double startX, double startY, double width, double height);
+	void TranslateShape(double vertical, double horizontal, int n);
 };
 
 void ShapesContainer::Free()
@@ -52,9 +55,9 @@ void ShapesContainer::Resize(int NewCappacity)
 	capacity = NewCappacity;
 }
 
-int ShapesContainer::GetCapacity()
+int ShapesContainer::GetCount()
 {
-	return capacity;
+	return count;
 }
 
 ShapesContainer::ShapesContainer()
@@ -121,6 +124,7 @@ void ShapesContainer::PrintAll()
 }
 void ShapesContainer::Erase(int index)
 {
+	//cout << count << index << endl;
 	int i = 0;
 	for (i ; i < count; i++)
 	{
@@ -146,4 +150,56 @@ void ShapesContainer::Erase(int index)
 	{
 		cout << "There is no figure number " << index << "!" << endl;
 	}	
+}
+void ShapesContainer::WithinCircle(double startX, double startY, double radius)
+{
+	int counter = 0;
+	for (int i = 0; i < count + 1; i++)
+	{
+		shapes[i]->WithinCircle(startX, startY, radius);
+		if (shapes[i]->WithinCircle(startX, startY, radius))
+		{
+			counter++;
+		}
+	}
+	if (counter==0)
+	{
+		cout << "No figures are located within circle " << startX << " " << startY << " " << radius;
+	}
+}
+void ShapesContainer::WithinRectangle(double startX, double startY, double width, double height)
+{
+	int counter = 0;
+	for (int i = 0; i < count + 1; i++)
+	{
+		shapes[i]->WithinRectangle(startX, startY, width, height);
+		if (shapes[i]->WithinRectangle(startX, startY, width, height))
+		{
+			counter++;
+		}
+	}
+	if (counter == 0)
+	{
+		cout << "No figures are located within circle " << startX << " " << startY << " " << width << " " << height;
+	}
+}
+void ShapesContainer::TranslateShape( double vertical, double horizontal, int n)
+{
+	shapes[n]->Translate(vertical, horizontal);
+}
+///////////////////////////////////////////////////////////////////////////////
+void Help()
+{
+	cout << "The following commands are supported:" << endl <<
+		"open <file>	  opens <file>" << endl <<
+		"close			  closes currently opened file" << endl <<
+		"save			  saves the currently open file" << endl <<
+		"saveas <file>	  saves the currently open file in <file>" << endl <<
+		"help			  prints this information" << endl <<
+		"exit			  exists the program" << endl <<
+		"print            prints all shapes" << endl <<
+		"create           creates new shape" << endl <<
+		"erase <n>        erases the nth shape" << endl <<
+		"translate [<n>]  transaltes the nth shape or if n is not given, translates all shapes" << endl <<
+		"whitin <option>  prints all shapes in that region" << endl;
 }
