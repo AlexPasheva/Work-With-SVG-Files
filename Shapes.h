@@ -23,8 +23,8 @@ public:
 	//Some Methods that are overwritten for different objects
 	virtual void Print(ostream& strm)=0;
 	virtual void Translate(double vertical, double horizontal)=0;
-	virtual void WhitinRectangle(double startX, double startY, double width, double height)=0;
-	virtual void WithinCircle(double startX, double startY, double radius)=0;
+	virtual bool WithinRectangle(double startX, double startY, double width, double height)=0;
+	virtual bool WithinCircle(double startX, double startY, double radius)=0;
 
 	virtual Shapes* clone()=0;
 };
@@ -74,8 +74,8 @@ public:
 	//Some Methods
 	void Translate(double vertical, double horizontal);
 	void Print(ostream& strm);
-	void WhitinRectangle(double startX, double startY, double width, double height);
-	void WithinCircle(double startX, double startY, double radius);
+	bool WithinRectangle(double startX, double startY, double width, double height);
+	bool WithinCircle(double startX, double startY, double radius);
 
 	Line* clone();
 };
@@ -104,22 +104,30 @@ void Line::Print(ostream& strm)
 }
 void Line::Translate(double vertical, double horizontal)
 {
-	this->GetStart().SetX(this->GetStart().GetX() + horizontal);
-	this->GetStart().SetY( this->GetStart().GetY() + vertical);
-	this->GetEnd().SetX (this->GetEnd().GetX() + horizontal);
-	this->GetEnd().SetY (this->GetEnd().GetY() + vertical);
+	start.SetX(start.GetX() + horizontal);
+	start.SetY(start.GetY() + horizontal);
+	end.SetX(end.GetX() + horizontal);
+	end.SetY(end.GetY() + horizontal);
 }
-void Line::WhitinRectangle(double startX, double startY, double width, double height)
+bool Line::WithinRectangle(double startX, double startY, double width, double height)
 {
-	if (start.WithinRectangle(startX, startY, width, height)&&end.WithinRectangle(startX, startY, width, height))
+	if (start.WithinRectangle(startX, startY, width, height) && end.WithinRectangle(startX, startY, width, height))
 	{
 		this->Print(cout);
+		return true;
 	}
+	else
+		return false;
 }
-void Line::WithinCircle(double startX, double startY, double radius)
+bool Line::WithinCircle(double startX, double startY, double radius)
 {
-	if (start.WithinCircle(startX, startY, radius)&&end.WithinCircle(startX, startY, radius))
+	if (start.WithinCircle(startX, startY, radius) && end.WithinCircle(startX, startY, radius))
+	{
 		this->Print(cout);
+		return true;
+	}
+	else
+		return false;
 }
 
 Line* Line::clone()
@@ -145,9 +153,9 @@ public:
 	//Some methods
 	void Print(ostream& strm);
 	void Translate(double horizontal, double vertical);
-	bool IsWhitinRectangle(double startX, double startY, double width, double height);
-	void WhitinRectangle(double startX, double startY, double width, double height);
-	void WithinCircle(double startX, double startY, double radius);
+	bool IsWithinRectangle(double startX, double startY, double width, double height);
+	bool WithinRectangle(double startX, double startY, double width, double height);
+	bool WithinCircle(double startX, double startY, double radius);
 
 	virtual Circle* clone();
 };
@@ -182,10 +190,10 @@ void Circle::Print(ostream& strm)
 }
 void Circle::Translate(double horizontal, double vertical)
 {
-	this->GetStart().SetX(this->GetStart().GetX() + horizontal);
-	this->GetStart().SetY(this->GetStart().GetY() + vertical);
+	start.SetX(start.GetX() + horizontal);
+	start.SetY(start.GetY() + horizontal);
 }
-bool Circle::IsWhitinRectangle(double startX, double startY, double width, double height)
+bool Circle::IsWithinRectangle(double startX, double startY, double width, double height)
 {
 	Point rectangleCenter = Point((startX + width / 2),(startY + height / 2));
 
@@ -195,43 +203,53 @@ bool Circle::IsWhitinRectangle(double startX, double startY, double width, doubl
 	double dx = abs(start.GetX() - rectangleCenter.GetX());
 	double dy = abs(start.GetY() - rectangleCenter.GetY());
 
-	if (dx > (radius + w) || dy > (radius + h)) return true;
+	if (dx > (radius + w) || dy > (radius + h)) return false;
 
 	Point circleDistance = Point((abs(start.GetX() - startX - w)), (abs(start.GetY() - startY - h)));
 
 	if (circleDistance.GetX() <= (w))
 	{
-		return false;
+		return true;
 	}
 	if (circleDistance.GetY() <= (h))
 	{
-		return false;
+		return true;
 	}
 	double cornerDistanceSq = pow(circleDistance.GetX() - w, 2) + pow(circleDistance.GetY() - h, 2);
 
-	return !(cornerDistanceSq <= (pow(radius, 2)));
+	return (cornerDistanceSq <= (pow(radius, 2)));
 }
-void Circle::WhitinRectangle(double startX, double startY, double width, double height)
+bool Circle::WithinRectangle(double startX, double startY, double width, double height)
 {
-	if (this->IsWhitinRectangle(startX,startY,width,height))
+	if (this->IsWithinRectangle(startX,startY,width,height))
 	{
 		this->Print(cout);
+		return true;
 	}
+	return false;
 }
-void Circle::WithinCircle(double startX, double startY, double radius)
+bool Circle::WithinCircle(double startX, double startY, double radius)
 {
 	Point point(startX, startY);
 	double dist = start.Dist(point);
 	if (this->GetRadius()<radius)
 	{
 		if (dist + radius < this->GetRadius())
+		{
 			this->Print(cout);
+			return true;
+		}
+	}
+	else if(dist + this->GetRadius() < radius)
+	{
+		this->Print(cout);
+		return true;
 	}
 	else
 	{
-		if (dist + this->GetRadius() < radius)
-			this->Print(cout);
+		return false;
 	}
+	
 }
 
 Circle* Circle::clone()
@@ -256,8 +274,8 @@ public:
 	//Some methods
 	void Print(ostream& strm);
 	void Translate(double horizontal, double vertical);
-	void WhitinRectangle(double startX, double startY, double width, double height);
-	void WithinCircle(double startX, double startY, double radius);
+	bool WithinRectangle(double startX, double startY, double width, double height);
+	bool WithinCircle(double startX, double startY, double radius);
 
 	virtual Rectangle* clone();
 };
@@ -295,17 +313,20 @@ void Rectangle::Print(ostream& strm)
 	strm << color;
 	strm << endl;
 }
-void Rectangle::WhitinRectangle(double startX, double startY, double width, double height)
+bool Rectangle::WithinRectangle(double startX, double startY, double width, double height)
 {
 	Point LeftUpperCorner(start.GetX() + this->GetWidth(), start.GetY() + this->GetHeight());
 	Point RightUpperCorner(start.GetX(), start.GetY() + this->GetHeight());
 	Point LeftBottomCorner(start.GetX() + this->GetWidth(), start.GetY());
-	if (start.WithinRectangle(startX, startY, width, height) && LeftUpperCorner.WithinRectangle(startX, startY, width, height)&& RightUpperCorner.WithinRectangle(startX, startY, width, height)&& LeftBottomCorner.WithinRectangle(startX, startY, width, height))
+	if (start.WithinRectangle(startX, startY, width, height) && LeftUpperCorner.WithinRectangle(startX, startY, width, height) && RightUpperCorner.WithinRectangle(startX, startY, width, height) && LeftBottomCorner.WithinRectangle(startX, startY, width, height))
 	{
 		this->Print(cout);
+		return true;
 	}
+	else
+		return false;
 }
-void Rectangle::WithinCircle(double startX, double startY, double radius)
+bool Rectangle::WithinCircle(double startX, double startY, double radius)
 {
 	Point LeftUpperCorner(start.GetX() + this->GetWidth(), start.GetY() + this->GetHeight());
 	Point RightUpperCorner(start.GetX(), start.GetY() + this->GetHeight());
@@ -313,12 +334,15 @@ void Rectangle::WithinCircle(double startX, double startY, double radius)
 	if (start.WithinCircle(startX, startY, radius) && LeftUpperCorner.WithinCircle(startX, startY, radius) && RightUpperCorner.WithinCircle(startX, startY, radius) && LeftBottomCorner.WithinCircle(startX, startY, radius))
 	{
 		this->Print(cout);
+		return true;
 	}
+	else
+		return false;
 }
 void Rectangle::Translate(double horizontal, double vertical)
 {
-	this->GetStart().SetX(this->GetStart().GetX() + horizontal);
-	this->GetStart().SetY(this->GetStart().GetY() + vertical);
+	start.SetX(start.GetX() + horizontal);
+	start.SetY(start.GetY() + horizontal);
 }
 
 Rectangle* Rectangle::clone()
