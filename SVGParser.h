@@ -26,43 +26,42 @@ int LinesCount(string filename)
 ShapesContainer ParseFile(string filename)
 {
 	ShapesContainer array;
-	int currsor=LinesCount(filename);
+	int currsor=LinesCount(filename);//the total lines in the file
 	ifstream input;
-	string line;
-	string helper;
+	string line;                     // I'm using that string to get rid of chars I do not need
 	string token = "<svg>";
 	input.open(filename);
 	unsigned int curLine = 0;
-	while (getline(input, line)) 
+	while (getline(input, line))     // curLine is the index of the start of the <svg> tag
 	{
 		curLine++;
-		if (line.find(token, 0) != string::npos) {
-			cout << "found: " << token << "line: " << curLine << endl;
+		if (line.find(token, 0) != string::npos) 
+		{
 			break;
 		}
-	}
+	}                                // I'm finding curLine by searching for the <svg> tag
+
+
 	string shape;
-	string line2;
 	int LinesLeft = currsor - curLine + 1;
-	int startX = 0;
-	int startY = 0;
-	int endX = 0;
-	int endY = 0;
-	char color1[50];
+	int startX = 0, startY = 0, startY = 0, endX = 0, endY = 0;
+	string line2;
 	string color;
+
 	input.seekg(0);
-	for (int n = 1; n < curLine; n += 1) 
+
+	for (int n = 1; n < curLine; n += 1) // skipping the first lines before the opening tag
 	{
 		if (!getline(input, line2)) 
 		{
 			cout << "error";
 		}
 	}
-	while (getline(input, line2)) 
+	while (getline(input, line2))    //building the Container
 	{
 		if (LinesLeft==currsor)
 		{
-			break;
+			break;                   // I break before the closing </svg> tag
 		}
 
 		input.ignore(3);
@@ -153,6 +152,5 @@ ShapesContainer ParseFile(string filename)
 		LinesLeft++;
 	}
 
-	array.PrintAll();
 	return array;
 }
