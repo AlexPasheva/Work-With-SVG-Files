@@ -41,10 +41,9 @@ ShapesContainer ParseFile(string filename)
 		}
 	}                                // I'm finding curLine by searching for the <svg> tag
 
-
 	string shape;
 	int LinesLeft = currsor - curLine + 1;
-	int startX = 0, startY = 0, startY = 0, endX = 0, endY = 0;
+	int startX = 0, startY = 0, endX = 0, endY = 0;
 	string line2;
 	string color;
 
@@ -153,4 +152,36 @@ ShapesContainer ParseFile(string filename)
 	}
 
 	return array;
+}
+void WritingBackInSVGFile(const char* filename, ShapesContainer& array)// this function is building new svg file with changed information
+{
+	ofstream ofs;
+	ofs.open("temp.svg", ofstream::out);// using this file to build the whole file changing only the <svg> tagged section
+	int currsor = LinesCount(filename);//the total lines in the file
+	ifstream input;
+	string line;                     // I'm using that string to get rid of chars I do not need
+	string token = "<svg>";
+	input.open(filename);
+	unsigned int curLine = 0;
+	while (getline(input, line))     // curLine is the index of the start of the <svg> tag
+	{
+		curLine++;
+		if (line.find(token, 0) != string::npos)
+		{
+			break;
+		}
+	}                                // I'm finding curLine by searching for the <svg> tag
+	input.seekg(0);
+	int LinesLeft = currsor - curLine + 1;
+	for (int i = 0; i < curLine; i++)
+	{
+		getline(input, line);
+		ofs << line << endl;
+	}
+	array.PrintAllInStrm(ofs);
+	ofs << "</svg>";
+
+	remove(filename);
+
+	rename("temp.svg", filename);
 }
