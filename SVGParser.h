@@ -180,8 +180,4 @@ void WritingBackInSVGFile(const char* filename, ShapesContainer& array)// this f
 	}
 	array.PrintAllInStrm(ofs);
 	ofs << "</svg>";
-
-	remove(filename);
-
-	rename("temp.svg", filename);
 }
