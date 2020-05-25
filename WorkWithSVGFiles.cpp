@@ -1,21 +1,20 @@
 #include <iostream>
 #include "SVGParser.h"
 int main()
-{
-	ShapesContainer array;
+{	ShapesContainer array;
 	ifstream input;
-
-	char* CommandLine=new char[256];
-	char* command=new char[256];
-	char* shape=new char[256];
-	char* color = new char[256];
-	char* filename = new char[256];
+	ofstream ofs;
+	char* CommandLine=new char[MAXLEN];
+	char* command=new char[MAXLEN];
+	char* shape=new char[MAXLEN];
+	char* color = new char[MAXLEN];
+	char* filename = new char[MAXLEN];
 	int vertical=0, horizontal=0;
 	int startX = 0, startY = 0, endX = 0, endY = 0;
-	//string color;
+
 	while(1)
 	{
-		cout << "Enter command"<<endl;
+		cout << "Enter command:"<<endl;
 
 		cin.getline(command,100);
 
@@ -111,14 +110,22 @@ int main()
 			cout << "Enter svg file name:" << endl;
 			cin.getline(shape, 100);
 			WritingBackInSVGFile(shape, array);
+			remove(shape);
+			rename("temp.svg", shape);
 		}
 		else if (strcmp(command, "save") == 0)
 		{
 			WritingBackInSVGFile(filename, array);
+			remove(filename);
+			rename("temp.svg", filename);
 		}
 		else if (strcmp(command, "exit") == 0)
 		{
 			break;
+		}
+		else if (strcmp(command, "help") == 0)
+		{
+			Help();
 		}
 	}
 }
