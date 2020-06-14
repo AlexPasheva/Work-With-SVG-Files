@@ -56,7 +56,7 @@ bool Line::WithinCircle(double startX, double startY, double radius)
 		return false;
 }
 
-Line* Line::clone()
+Shape* Line::clone()
 {
 	return new Line(*this);
 }
