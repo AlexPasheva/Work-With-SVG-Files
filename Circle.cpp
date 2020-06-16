@@ -98,7 +98,7 @@ bool Circle::WithinCircle(double startX, double startY, double radius)
 
 }
 
-Circle* Circle::clone()
+Shapes* Circle::clone()
 {
 	return new Circle(*this);
 }
