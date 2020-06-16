@@ -54,16 +54,6 @@ bool Rectangle::WithinRectangle(double startX, double startY, double width, doub
 }
 bool Rectangle::WithinCircle(double startX, double startY, double radius)
 {
-	Point LeftUpperCorner(start.GetX() + this->GetWidth(), start.GetY() + this->GetHeight());
-	Point RightUpperCorner(start.GetX(), start.GetY() + this->GetHeight());
-	Point LeftBottomCorner(start.GetX() + this->GetWidth(), start.GetY());
-	if (start.WithinCircle(startX, startY, radius) && LeftUpperCorner.WithinCircle(startX, startY, radius) && RightUpperCorner.WithinCircle(startX, startY, radius) && LeftBottomCorner.WithinCircle(startX, startY, radius))
-	{
-		this->Print(cout);
-		return true;
-	}
-	else
-		return false;
 }
 void Rectangle::Translate(double horizontal, double vertical)
 {
