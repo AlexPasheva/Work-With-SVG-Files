@@ -26,7 +26,7 @@ void ShapesContainer::Resize(int NewCappacity)
 	capacity = NewCappacity;
 }
 
-int ShapesContainer::GetCount()
+int ShapesContainer::GetCount()const
 {
 	return count;
 }
@@ -94,7 +94,7 @@ void ShapesContainer::PrintAllInStrm(ostream& strm)
 	for (int i = 0; i < count; i++)
 		shapes[i]->Print(strm);
 }
-void ShapesContainer::PrintAll()
+void ShapesContainer::PrintAll()cosnt
 {
 	for (int i = 0; i < count; i++)
 		shapes[i]->Print();
