@@ -61,7 +61,7 @@ void Rectangle::Translate(double horizontal, double vertical)
 	start.SetY(start.GetY() + horizontal);
 }
 
-Shape* Rectangle::clone()
+Shapes* Rectangle::clone()
 {
 	return new Rectangle(*this);
 }
