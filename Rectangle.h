@@ -18,5 +18,5 @@ public:
 	bool WithinRectangle(double startX, double startY, double width, double height);
 	bool WithinCircle(double startX, double startY, double radius);
 
-	Shape* clone();
+	Shapes* clone();
 };
