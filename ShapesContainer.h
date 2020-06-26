@@ -18,12 +18,12 @@ public:
 	ShapesContainer& operator=(const ShapesContainer& other);
 	~ShapesContainer();
 
-	int GetCount();
+	int GetCount()const;
 
 	Shapes* AtIndex(int index);
 	void AddShape(const char* shape, double startX, double startY, const char* color, double endX, double endY=0);
 	void PrintAllInStrm(ostream& strm);
-	void PrintAll();
+	void PrintAll()const;
 	void Erase(int index);
 	void WithinCircle(double startX, double startY, double radius);
 	void WithinRectangle(double startX, double startY, double width, double height);
