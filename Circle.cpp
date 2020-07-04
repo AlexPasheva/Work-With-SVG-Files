@@ -95,8 +95,12 @@ bool Circle::WithinCircle(double startX, double startY, double radius)
 	{
 		return false;
 	}
-
 }
+double Area(double width, double height=0)
+{
+	return 3.14*width*width;
+}
+
 
 Shapes* Circle::clone()
 {
