@@ -20,6 +20,7 @@ public:
 	bool IsWithinRectangle(double startX, double startY, double width, double height);
 	bool WithinRectangle(double startX, double startY, double width, double height);
 	bool WithinCircle(double startX, double startY, double radius);
+	double Area(double width, double height);
 
 	Shapes* clone();
 };
