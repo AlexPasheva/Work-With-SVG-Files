@@ -60,6 +60,10 @@ void Rectangle::Translate(double horizontal, double vertical)
 	start.SetX(start.GetX() + horizontal);
 	start.SetY(start.GetY() + horizontal);
 }
+double Area(double width, double height)
+{
+	return width*height;
+}
 
 Shapes* Rectangle::clone()
 {
