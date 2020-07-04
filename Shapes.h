@@ -23,7 +23,7 @@ public:
 	virtual void Translate(double vertical, double horizontal)=0;
 	virtual bool WithinRectangle(double startX, double startY, double width, double height)=0;
 	virtual bool WithinCircle(double startX, double startY, double radius)=0;
-	virtual double Area(double width, double height);
+	virtual double Area(double width, double height)=0;
 	virtual ~Shapes();
 
 	virtual Shapes* clone()=0;
