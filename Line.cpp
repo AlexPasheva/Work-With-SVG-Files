@@ -55,7 +55,10 @@ bool Line::WithinCircle(double startX, double startY, double radius)
 	else
 		return false;
 }
-
+double Area(double width, double height)
+{
+	return 0;
+}
 Shapes* Line::clone()
 {
 	return new Line(*this);
